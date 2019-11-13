@@ -1,0 +1,6 @@
+# virtual env
+python3/
+.tox/
+# eclipse files
+.project
+.pydevproject
