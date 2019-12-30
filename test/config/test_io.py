@@ -1,6 +1,3 @@
-'''
-Test IO methods
-'''
 import os
 import pytest
 from hai import io
