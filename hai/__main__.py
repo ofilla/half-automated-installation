@@ -18,17 +18,14 @@ Half-Automated Installation
 import sys
 import os
 
+from hai.config import users
+
 from argparse import ArgumentParser
 from argparse import RawDescriptionHelpFormatter
 
 __all__ = []
 __version__ = 0.1
 __date__ = '2019-11-17'
-__updated__ = '2019-11-17'
-
-DEBUG = 1
-TESTRUN = 0
-PROFILE = 0
 
 
 class CLIError(Exception):
@@ -53,7 +50,7 @@ def main(argv=None):
         sys.argv.extend(argv)
 
     program_name = os.path.basename(sys.argv[0])
-    program_version_message = '%%(prog)s v%s (%s)' % (__version__, __updated__)
+    program_version_message = '%%(prog)s v%s (%s)' % (__version__, __date__)
     program_shortdesc = __doc__.split("\n")[1]
     program_license = """%s
 
@@ -77,12 +74,36 @@ USAGE
         )
 
         parser.add_argument(
+            "-c",
+            "--configuration-directory",
+            dest="confpath",
+            action="store",
+            required=True,
+            help="path to configuration files"
+        )
+        parser.add_argument(
+            "-d",
+            "--dry-run",
+            dest="dryrun",
+            action="store_true",
+            default=False,
+            help="Do not modify the system"
+        )
+        parser.add_argument(
+            "-u",
+            "--users",
+            dest="users",
+            action="store_true",
+            default=False,
+            help="set up / modify user accounts"
+        )
+        parser.add_argument(
             "-v",
             "--verbose",
             dest="verbose",
             action="store_true",
             default=False,
-            help="enable verbosity"
+            help="path to configuration files"
         )
         parser.add_argument(
             '-V',
@@ -93,20 +114,23 @@ USAGE
 
         # Process arguments
         args = parser.parse_args()
-
+        dryrun = args.dryrun
         verbose = args.verbose
+        confpath = args.confpath
+        if confpath[-1] != '/':
+            confpath += '/'
 
-        if verbose:
-            print("Verbose mode on")
+        print("Path to configuration files:" + confpath[:-1])
+        users.VERBOSE = verbose
+        users.DRYRUN = dryrun
+        if args.users:
+            users.configure_all(confpath + 'users.cfg')
 
-        return 0
-    except KeyboardInterrupt:
-        # handle keyboard interrupt #
         return 0
     except Exception as e:
         indent = len(program_name) * " "
         sys.stderr.write(program_name + ": " + repr(e) + "\n")
-        sys.stderr.write(indent + "  for help use --help")
+        sys.stderr.write(indent + "  for help use --help\n")
         return 2
 
 
