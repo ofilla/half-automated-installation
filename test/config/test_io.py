@@ -9,7 +9,9 @@ TEST_FILENAME = "test_file.towrite"
 
 
 def setup_function():
-    open(TEST_FILENAME, "x").write("property = value\n")
+    with open(TEST_FILENAME, "x") as file:
+        file.write("[example]\n")
+        file.write("property = value\n")
 
 
 def teardown_function():
@@ -84,4 +86,30 @@ def test_remove_file():
 @pytest.mark.io
 def test_read_simple_config():
     config = io.read_config(TEST_FILENAME)
-    assert config['property'] == 'value'
+    example_config = config['example']
+    assert example_config['property'] == 'value'
+
+
+@pytest.mark.io
+def test_write_config_overwrite_fails():
+    """
+    io.write_config shall not overwrite files
+    """
+    expected = io.read_config(TEST_FILENAME)
+    with pytest.raises(FileExistsError):
+        io.write_config(expected, TEST_FILENAME)
+
+
+@pytest.mark.io
+def test_write_config():
+    """
+    Test writing of config,
+    assuming reading config works as expected.
+    """
+    expected = io.read_config(TEST_FILENAME)
+    io.remove_file(TEST_FILENAME)
+
+    io.write_config(expected, TEST_FILENAME)
+
+    result = io.read_config(TEST_FILENAME)
+    assert result == expected

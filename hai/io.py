@@ -57,11 +57,16 @@ def is_existing_file(filename):
 
 
 def read_config(filename):
-    """ (str) -> dict
+    """ (str) -> ConfigParser
     Read a config file and return lines as dict.
     """
     config = ConfigParser()
-    content = "[default]\n"
-    content += open(filename).read()
-    config.read_string(content, filename)
-    return config['default']
+    config.read_string(open(filename).read(), filename)
+    return config
+
+
+def write_config(config, filename):
+    """ (ConfigParser, str) -> None
+    Write config to given filename
+    """
+    config.write(open(filename, 'x'))
