@@ -6,26 +6,31 @@ import subprocess
 from hai import io
 
 DRYRUN = True
-ADDUSER_PARAMETERS = {
-    "home",
-    "shell",
-    "no-create-home",
-    "uid",
-    "firstuid",
-    "lastuid",
-    "gecos",
-    "ingroup",
+USERADD_PARAMETERS = {
+    "base-dir",
+    "comment",
+    "home-dir",
+    "defaults",
+    "expiredate",
+    "inactive",
     "gid",
-    "disabled-password",
-    "disabled-login",
+    "groups",
+    "help",
+    "skel",
+    "key",
+    "no-log-init",
+    "create-home",
+    "no-create-home",
+    "no-user-group",
+    "non-unique",
+    "password",
     "system",
-    "home",
+    "root",
     "shell",
     "uid",
-    "gecos",
-    "add_extra_groups",
-    "encrypt-home",
-    "system"
+    "user-group",
+    "selinux-user",
+    "extrausers"
 }
 USERMOD_PARAMETERS = {
     "comment",
@@ -82,7 +87,7 @@ def configure_user(config):
     user_found = is_existing_user(username)
     if not user_found:
         print("  add new user")
-        call_command_with_parameter(config, 'adduser', ADDUSER_PARAMETERS)
+        call_command_with_parameter(config, 'useradd', USERADD_PARAMETERS)
         print("  modify new user")
     else:
         print("  modify existing user")
