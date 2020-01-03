@@ -78,7 +78,7 @@ def configure_user(config):
         home: path to home directory (str)
         no_create_home: (bool)
         groups: list of groups, separated by comma (str)
-    #    password: encrypted password (str)
+        password: encrypted password (str)
         shell: path to shell (str)
     """
     username = config['user']
