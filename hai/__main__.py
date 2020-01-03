@@ -85,14 +85,6 @@ USAGE
             help="set up / modify user accounts"
         )
         parser.add_argument(
-            "-v",
-            "--verbose",
-            dest="verbose",
-            action="store_true",
-            default=False,
-            help="path to configuration files"
-        )
-        parser.add_argument(
             '-V',
             '--version',
             action='version',
@@ -102,13 +94,11 @@ USAGE
         # Process arguments
         args = parser.parse_args()
         dryrun = args.dryrun
-        verbose = args.verbose
         confpath = args.confpath
         if confpath[-1] != '/':
             confpath += '/'
 
         print("Path to configuration files:" + confpath[:-1])
-        users.VERBOSE = verbose
         users.DRYRUN = dryrun
         if args.users:
             users.configure_all(confpath + 'users.cfg')

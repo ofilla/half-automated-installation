@@ -5,7 +5,6 @@ Set up user accounts.
 import subprocess
 from hai import io
 
-VERBOSE = True
 DRYRUN = True
 ADDUSER_PARAMETERS = {
     "home",
