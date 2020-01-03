@@ -83,8 +83,9 @@ def configure_user(config):
     if not user_found:
         print("  add new user")
         call_command_with_parameter(config, 'adduser', ADDUSER_PARAMETERS)
+        print("  modify new user")
     else:
-        print("  only modify new user")
+        print("  modify existing user")
     call_command_with_parameter(config, 'usermod', USERMOD_PARAMETERS)
 
 
@@ -137,7 +138,7 @@ def is_existing_user(username):
     check_needed_command('id')
 
     return_value = subprocess.call(
-        ["id", username, "&> /dev/null"],
+        ["id", username],
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL
     )
